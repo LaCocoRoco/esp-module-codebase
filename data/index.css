@@ -1,0 +1,335 @@
+/*************/
+/** GENERAL **/
+/*************/
+
+:root {
+  --fieldset-min-width: 320px;
+}
+
+@media only screen and (min-width: 480px) {
+  :root {
+    --fieldset-min-width: 404px;
+  }
+}
+
+html {
+  background-color: #1d1e22;
+  font-family: 'Arial';
+  color: white;
+  font-size: 14px;
+}
+
+@media only screen and (min-width: 480px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+fieldset {
+  width: 100%;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid white;
+  border-radius: 5px;
+}
+
+@media only screen and (min-width: 480px) {
+  fieldset {
+    width: 480px;
+  }
+}
+
+body {
+  margin: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1004px;
+  height: fit-content;
+}
+
+input {
+  width: 100%;
+  outline: none;
+  padding: 6px 6px;
+  border: 0px;
+  border-radius: 5px;
+}
+
+legend {
+  margin-left: 5px;
+}
+
+button {
+  font-size: 15px;
+  width: 100%;
+  background-color: #1d1e22;
+  color: white;
+  padding: 6px 0px;
+  border: 2px solid white;
+  border-radius: 5px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+button:active:enabled {
+  transform: scale(0.95);
+}
+
+/************/
+/** SYSTEM **/
+/************/
+
+.system-container {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr;
+  gap: 5px;
+}
+
+.system-text {
+  text-align: center;
+  padding: 6px;
+  border: 2px solid white;
+  border-radius: 5px;
+  min-width: 100px;
+}
+.system-information {
+  text-align: center;
+  grid-column: 1 / 3;
+}
+
+/**************/
+/** TERMINAL **/
+/**************/
+
+.terminal-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.terminal-text-area {
+  width: 100%;
+  resize: vertical;
+  outline: none;
+  padding: 6px;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 12px;
+  height: 200px;
+}
+
+@media only screen and (min-width: 480px) {
+  .terminal-text-area {
+    font-size: 15px;
+  }
+}
+
+/*********/
+/** CMD **/
+/*********/
+
+.cmd-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+/**********/
+/** WIFI **/
+/**********/
+
+.wifi-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.wifi-network-wrapper {
+  display: none;
+  grid-template-columns: 1fr 0.3fr;
+  gap: 5px;
+}
+
+.wifi-variable {
+  text-align: center;
+  padding: 5px;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.wifi-value {
+  text-align: center;
+  padding: 5px;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.wifi-input {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.wifi-loader {
+  display: none;
+  text-align: center;
+  padding: 6px;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.wifi-selected {
+  background-color: white;
+  color: #1d1e22;
+}
+
+/************/
+/** SENSOR **/
+/************/
+
+.sensor-container {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 0.2fr;
+  gap: 5px;
+}
+
+.sensor-text {
+  text-align: center;
+  padding: 6px;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.sensor-rain-text {
+  grid-column: 1 / 2;
+}
+
+.sensor-rain-value {
+  grid-column: 2 / 4;
+}
+
+.sensor-change {
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+/***********/
+/** TOUCH **/
+/***********/
+
+.touch-fieldset {
+  min-width: var(--fieldset-min-width);
+}
+
+.touch-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.touch-key-wrapper {
+  width: calc(50% - 22px);
+  display: grid;
+  height: fit-content;
+  padding: 5px;
+  margin-bottom: 0px;
+  margin-right: 5px;
+  grid-template-columns: 0.3fr 1fr 0.3fr;
+  gap: 3px;
+}
+
+.touch-common-wrapper {
+  max-width: 100%;
+  display: grid;
+  height: fit-content;
+  padding: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  grid-template-columns: 0.3fr 1fr 0.3fr;
+  gap: 3px;
+}
+
+.touch-change {
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .touch-change:hover {
+    font-weight: bold;
+  }
+}
+
+@media only screen and (min-width: 525px) {
+  .touch-fieldset {
+    width: 480px;
+  }
+}
+
+@media only screen and (min-width: 759px) {
+  .touch-fieldset {
+    width: 720px;
+  }
+
+  .touch-key-wrapper,
+  .touch-common-wrapper {
+    width: calc(33% - 20px);
+  }
+}
+
+@media only screen and (min-width: 1021px) {
+  .touch-fieldset {
+    width: 1000px;
+  }
+
+  .touch-key-wrapper,
+  .touch-common-wrapper {
+    width: calc(25% - 22px);
+  }
+}
+
+/***********/
+/** INPUT **/
+/***********/
+
+.input-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.input-unused {
+  display: none;
+}
+
+/************/
+/** OUTPUT **/
+/************/
+
+.output-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.output-variable {
+  text-align: center;
+  padding: 6px;
+  border: 2px solid white;
+  border-radius: 5px;
+  background-color: #1d1e22;
+  color: white;
+}
+
+.output-active {
+  background-color: white;
+  color: #1d1e22;
+}
+
+.output-unused {
+  display: none;
+}

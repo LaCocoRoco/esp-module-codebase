@@ -1,0 +1,570 @@
+<html>
+  <head>
+    <title>ESP</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="ESP Shutter Controller" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="favicon" href="favicon.ico" />
+    <link rel="stylesheet" href="index.css" />
+    <script defer src="index.js" async></script>
+  </head>
+
+  <body>
+    <fieldset class="touch-fieldset" %touchModule%>
+      <legend>Touch Data</legend>
+      <div class="touch-container">
+        <div id="touchKeys" class="touch-container">
+          <fieldset class="touch-key-wrapper" value="0" name="key">
+            <legend name="header">Key 00</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse0%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale0%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal0%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference0%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="1" name="key">
+            <legend name="header">Key 01</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse1%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale1%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal1%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference1%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="2" name="key">
+            <legend name="header">Key 02</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse2%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale2%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal2%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference2%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="3" name="key">
+            <legend name="header">Key 03</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse3%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale3%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal3%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference3%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="4" name="key">
+            <legend name="header">Key 04</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse4%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale4%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal4%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference4%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="5" name="key">
+            <legend name="header">Key 05</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse5%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale5%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal5%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference5%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="6" name="key">
+            <legend name="header">Key 06</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse6%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale6%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal6%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference6%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="7" name="key">
+            <legend name="header">Key 07</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse7%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale7%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal7%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference7%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="8" name="key">
+            <legend name="header">Key 08</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse8%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale8%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal8%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference8%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="9" name="key">
+            <legend name="header">Key 09</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse9%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale9%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal9%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference9%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="10" name="key">
+            <legend name="header">Key 10</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse10%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale10%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal10%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference10%</div>
+          </fieldset>
+          <fieldset class="touch-key-wrapper" value="11" name="key">
+            <legend name="header">Key 11</legend>
+            <div>R</div>
+            <div>status</div>
+            <div name="keyStatus">%keyStatus11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">threshold</div>
+            <div name="keyThreshold">%keyThreshold11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control en</div>
+            <div name="keyControlEn">%keyControlEn11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control aks</div>
+            <div name="keyControlAks">%keyControlAks11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control gpo</div>
+            <div name="keyControlGpo">%keyControlGpo11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">control guard</div>
+            <div name="keyControlGuard">%keyControlGuard11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">pulse</div>
+            <div name="keyPulse">%keyPulse11%</div>
+            <div>W</div>
+            <div class="touch-change" onclick="touchChangeKey(this)">scale</div>
+            <div name="keyScale">%keyScale11%</div>
+            <div>R</div>
+            <div>signal</div>
+            <div name="keySignal">%keySignal11%</div>
+            <div>R</div>
+            <div>reference</div>
+            <div name="keyReference">%keyReference11%</div>
+          </fieldset>
+        </div>
+        <fieldset id="touchCommon" class="touch-common-wrapper" name="common">
+          <legend name="header">Common</legend>
+          <div>R</div>
+          <div>chip id</div>
+          <div name="chipId">%chipId%</div>
+          <div>R</div>
+          <div>firmware major</div>
+          <div name="firmwareMajor">%firmwareMajor%</div>
+          <div>R</div>
+          <div>firmware minor</div>
+          <div name="firmwareMinor">%firmwareMinor%</div>
+          <div>R</div>
+          <div>detect calibrate</div>
+          <div name="detectCalibrate">%detectCalibrate%</div>
+          <div>R</div>
+          <div>detect overflow</div>
+          <div name="detectOverflow">%detectOverflow%</div>
+          <div>R</div>
+          <div>detect sdet</div>
+          <div name="detectSdet">%detectSdet%</div>
+          <div>R</div>
+          <div>detect tdet</div>
+          <div name="detectTdet">%detectTdet%</div>
+          <div>R</div>
+          <div>slider status</div>
+          <div name="sliderStatus">%sliderStatus%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">calibrate</div>
+          <div name="calibrate">%calibrate%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">reset</div>
+          <div name="reset">%reset%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">low power mode</div>
+          <div name="lowPowerMode">%lowPowerMode%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">toward touch drift</div>
+          <div name="towardTouchDrift">%towardTouchDrift%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">away touch drift</div>
+          <div name="awayTouchDrift">%awayTouchDrift%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">detect integration</div>
+          <div name="detectionIntegration">%detectionIntegration%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">touch recal delay</div>
+          <div name="touchRecalDelay">%touchRecalDelay%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">drift hold time</div>
+          <div name="driftHoldTime">%driftHoldTime%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">slider opt enable</div>
+          <div name="sliderOptEnable">%sliderOptEnable%</div>
+          <div>W</div>
+          <div class="touch-change" onclick="touchChangeCommon(this)">slider opt wheel</div>
+          <div name="sliderOptWheel">%sliderOptWheel%</div>
+          <div>W</div>
+          <div>chargeTime</div>
+          <div name="chargeTime">%chargeTime%</div>
+        </fieldset>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset" %inputModule%>
+      <legend class="legend">Input</legend>
+      <div class="input-container">
+        <button id="input05" name="input05">Motor Links Auf</button>
+        <button id="input06" name="input06">Motor Links Ab</button>
+        <button id="input04" name="input04">Motor Rechts Auf</button>
+        <button id="input03" name="input03">Motor Rechts Ab</button>
+        <button id="input02" name="input02">Motor Links & Rechts Auf</button>
+        <button id="input01" name="input01">Motor Links & Rechts Ab</button>
+        <button id="input07" name="input07">Heizung Links</button>
+        <button id="input12" name="input12">Heizung Rechts</button>
+        <button id="input10" name="input10">Beleuchtung Links</button>
+        <button id="input11" name="input11">Beleuchtung Rechts</button>
+        <button id="input08" name="input08">Alles Ausschalten</button>
+        <button id="input09" name="input09" class="input-unused"></button>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset" %outputModule%>
+      <legend class="legend">Output</legend>
+      <div class="output-container">
+        <div id="output01" name="output01" class="%output01% output-variable">Heizung Links</div>
+        <div id="output02" name="output02" class="%output02% output-variable output-unused"></div>
+        <div id="output03" name="output03" class="%output03% output-variable output-unused"></div>
+        <div id="output04" name="output03" class="%output04% output-variable output-unused"></div>
+        <div id="output05" name="output05" class="%output05% output-variable output-unused"></div>
+        <div id="output06" name="output06" class="%output06% output-variable">Beleuchtung Links</div>
+        <div id="output07" name="output07" class="%output07% output-variable">Motor Links Ab</div>
+        <div id="output08" name="output08" class="%output08% output-variable">Motor Links Auf</div>
+        <div id="output09" name="output09" class="%output09% output-variable">Motor Rechts Auf</div>
+        <div id="output10" name="output10" class="%output10% output-variable">Motor Rechts Ab</div>
+        <div id="output11" name="output11" class="%output11% output-variable">Beleuchtung Rechts</div>
+        <div id="output12" name="output12" class="%output12% output-variable output-unused"></div>
+        <div id="output13" name="output13" class="%output13% output-variable output-unused"></div>
+        <div id="output14" name="output14" class="%output14% output-variable output-unused"></div>
+        <div id="output15" name="output15" class="%output15% output-variable output-unused"></div>
+        <div id="output16" name="output16" class="%output16% output-variable">Heizung Rechts</div>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="legend">Sensor Data</legend>
+      <div class="sensor-container">
+        <div class="sensor-text">Wind Speed</div>
+        <div id="sensorAnemometerVelocity" class="sensor-text">%anemometerVelocity%</div>
+        <div class="sensor-text">km/h</div>
+        <div class="sensor-text sensor-rain-text">Hydreon Status</div>
+        <div id="sensorHydreonStatus" class="sensor-text sensor-rain-value">%hydreonStatus%</div>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend>System Data</legend>
+      <div class="system-container">
+        <div class="system-text">Module</div>
+        <div class="system-text">%module%</div>
+        <div class="system-text">Hardware Version</div>
+        <div class="system-text">%hwv%</div>
+        <div class="system-text">Software Version</div>
+        <div class="system-text">%swv%</div>
+        <div class="system-text">Socket</div>
+        <div id="systemSocket" class="system-text">Disconnected</div>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="legend">Terminal</legend>
+      <div id="terminalContainer" class="terminal-container">
+        <textarea readonly id="terminalConsole" class="terminal-text-area"></textarea>
+        <input id="terminalInput" />
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend>Command Prompts</legend>
+      <div class="cmd-container">
+        <button id="cmdHelp" name="help">Log Help Commands</button>
+        <button id="cmdResetWifi" name="at reset wifi">Reset Wifi</button>
+        <button id="cmdResetModule" name="at reset module">Reset Module</button>
+        <button id="cmdRestart" name="at restart">Restart Module</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend>Wireless Local Area Network</legend>
+      <div class="wifi-container">
+        <button id="wifiScanner" name="at scanner">Search Network</button>
+        <div id="wifiScannerLoader" class="wifi-loader">Scanning for Network</div>
+        <div id="wifiNetwork" class="wifi-network-wrapper"></div>
+        <div id="wifiNetworkLoader" class="wifi-loader">Connecting to Network</div>
+      </div>
+    </fieldset>
+  </body>
+</html>
