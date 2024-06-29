@@ -35,7 +35,7 @@ void requestHandlerIndexHtml(AsyncWebServerRequest *request) {
 #ifdef ESP_SU
     if (var == "touchModule") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "inputModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "outputModule") return WEB_WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "outputModule") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "battery") return String(batteryVoltage);
     if (var == "anemometerVelocity") return String(anemometerVelocity);
     if (var == "hydreonStatus") return String(hydreonStatus);

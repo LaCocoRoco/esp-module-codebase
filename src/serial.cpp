@@ -3,6 +3,9 @@
 #include <cmd.h>
 #include <gpio.h>
 #include <logger.h>
+#ifdef ESP_SU
+#include <hydreon.h>
+#endif
 
 void setupSerial() {
   Serial.begin(SERIAL_BAUDRATE, SERIAL_8N1, GPIO_RX0, GPIO_TX0);

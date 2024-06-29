@@ -33,10 +33,6 @@ void setup() {
   setupTwi();
   setupTouch();
 #endif
-#ifdef ESP_SU
-  setupHydreon();
-  setupAnemometer();
-#endif
 }
 
 void loop() {

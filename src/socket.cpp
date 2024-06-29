@@ -146,7 +146,7 @@ void socketReceiveTouch(const JsonObject data) {
 #endif
 
 #ifdef ESP_SU
-voiv socketReceiveAnemometer(const JsonObject data) {
+void socketReceiveAnemometer(const JsonObject data) {
   anemometerCalibrate = true;
   anemometerCalibratedVelocity = (int)data["velocity"];
 }

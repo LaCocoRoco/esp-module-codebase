@@ -43,6 +43,7 @@ void socketReceiveTouch(const JsonObject data);
 bool socketEvaluateTouchData(const JsonObject *data);
 #endif
 #ifdef ESP_SU
+void socketReceiveAnemometer(const JsonObject data);
 bool socketEvaluateSensorData(const JsonObject *data);
 #endif
 
