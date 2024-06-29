@@ -15,6 +15,7 @@
 String wifiSSID;
 String wifiPassword;
 int wifiChannel;
+wifi_mode_t wifiMode;
 WifiState wifiState;
 IPAddress wifiAddress;
 bool wifiInitializeNetwork;
@@ -28,6 +29,7 @@ int scanner;
 void setupNetwork() {
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
+  wifiMode = WIFI_AP_STA;
   wifiInitializeNetwork = true;
 }
 
@@ -39,7 +41,9 @@ void wifiController() {
   switch (wifiState) {
     case WIFI_IDLE: {
       if (mode == MODE_WEB) {
-        if (WiFi.getMode() == WIFI_MODE_STA) {
+        if (wifiMode == WIFI_MODE_STA) {
+          // ESP-NOW only works reliably in WIFI_AP_STA mode.
+          // Therefore, we use a custom WiFiMode to keep track of it.
           if (WiFi.status() != WL_CONNECTED) {
             logger(TRACE, "Wifi Retry Connect Station");
             wifiState = WIFI_NETWORK_INITIALIZE;
@@ -79,18 +83,19 @@ void wifiController() {
       wifiPassword = preferences.getString(PREFERENCES_KEY_WIFI_PASSWORD, String());
       WiFi.disconnect();
       WiFi.setHostname(MODULE_HOSTNAME.c_str());
+      WiFi.mode(WIFI_AP_STA);
 
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
         logger(TRACE, "Wifi Connect Station");
-        WiFi.mode(WIFI_STA);
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
         wifiTime = millis();
+        wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
         logger(TRACE, "Wifi Setup Access Point");
-        WiFi.mode(WIFI_AP);
         WiFi.softAP(MODULE_SSID.c_str(), NULL, wifiChannel, 0);
         WiFi.softAPConfig(WIFI_APIP, WIFI_GATEWAY, WIFI_SUBNET);
+        wifiMode = WIFI_AP;
         wifiState = WIFI_NETWORK_ACCESS_POINT;
       }
 
@@ -186,6 +191,7 @@ void wifiController() {
       WiFi.disconnect();
       WiFi.mode(WIFI_AP_STA);
       WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
+      wifiMode = WIFI_AP_STA;
       wifiState = WIFI_IDLE;
       break;
     }

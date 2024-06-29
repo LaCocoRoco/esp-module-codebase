@@ -18,23 +18,25 @@
 PeerInfoState peerInfoState;
 esp_now_peer_info_t peerInfo;
 unsigned long peerInfoTime;
+int espNowChannelMonitor;
 int peerInfoRequestChannel;
 int peerInfoRequestRetrys;
 bool peerInfoRequest;
 bool peerInfoReceived;
+byte espNowMac[ESP_NOW_MAC_SIZE] = {0};
 EspNowData espNowData;
 EspNowPeerInfoResponse espNowPeerInfoResponse;
 EspNowPeerInfoRequest espNowPeerInfoRequest;
 EspNowTouchData espNowTouchData;
 EspNowHydreonData espNowHydreonData;
 EspNowAnemometerData espNowAnemometerData;
-RTC_DATA_ATTR byte espNowMac[ESP_NOW_MAC_SIZE] = {0};
 
 void setupEspNow() {
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_init();
   esp_now_register_send_cb(onDataSent);
   esp_now_register_recv_cb(onDataReceive);
+  espNowChannelMonitor = wifiChannel;
 #ifdef ESP_OU
   peerInfoSetup();
 #endif
@@ -58,12 +60,12 @@ void onDataSent(const byte *mac, const esp_now_send_status_t status) {
       logger(TRACE, "ERROR: EspNow Send Failure");
     }
 
+#ifndef ESP_CU
     if (WiFi.channel() != wifiChannel) {
-      logger(TRACE, "WARNING: EspNow PeerInfo Channel Mismatch");
-      logger(TRACE, "Channel Client: " + String(WiFi.channel()));
-      logger(TRACE, "Channel Server: " + String(wifiChannel));
+      logger(TRACE, "ERROR: EspNow PeerInfo Channel Mismatch");
     }
   }
+#endif
 }
 
 void onDataReceive(const byte *mac, const byte *data, const int len) {
@@ -86,7 +88,6 @@ void onDataReceive(const byte *mac, const byte *data, const int len) {
 void peerInfoSetup() {
   memcpy(peerInfo.peer_addr, ESP_NOW_MAC_BROADCAST, ESP_NOW_MAC_SIZE);
   esp_now_add_peer(&peerInfo);
-
   memcpy(peerInfo.peer_addr, espNowMac, ESP_NOW_MAC_SIZE);
   esp_now_add_peer(&peerInfo);
 
@@ -101,6 +102,12 @@ void peerInfoController() {
   switch (peerInfoState) {
     case PEER_INFO_IDLE: {
       if (wifiState == WIFI_IDLE) {
+        if (espNowChannelMonitor != wifiChannel) {
+          Serial.println("espNowChannelMonitor");
+          espNowChannelMonitor = wifiChannel;
+          peerInfoRequest = true;
+        }
+
         if (peerInfoRequest) {
           logger(TRACE, "Peer Info Request Initialized");
           wifiInitializeStandalone = true;
