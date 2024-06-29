@@ -42,8 +42,8 @@ void wifiController() {
     case WIFI_IDLE: {
       if (mode == MODE_WEB) {
         if (wifiMode == WIFI_MODE_STA) {
-          // ESP-NOW only works reliably in WIFI_AP_STA mode.
-          // Therefore, we use a custom WiFiMode to keep track of it.
+          // ESP-NOW only works reliably in WIFI_AP_STA mode
+          // Therefore, we use a custom wifiMode struct to keep track of it
           if (WiFi.status() != WL_CONNECTED) {
             logger(TRACE, "Wifi Retry Connect Station");
             wifiState = WIFI_NETWORK_INITIALIZE;
@@ -88,6 +88,7 @@ void wifiController() {
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
         logger(TRACE, "Wifi Connect Station");
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
+        WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
         wifiTime = millis();
         wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;

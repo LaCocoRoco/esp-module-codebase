@@ -35,19 +35,13 @@ void setupEspNow() {
   esp_now_init();
   esp_now_register_send_cb(onDataSent);
   esp_now_register_recv_cb(onDataReceive);
-#ifdef ESP_OU
-  peerInfoSetup();
-#endif
-#ifdef ESP_SU
+#ifndef ESP_CU
   peerInfoSetup();
 #endif
 }
 
 void taskEspNow() {
-#ifdef ESP_OU
-  peerInfoController();
-#endif
-#ifdef ESP_SU
+#ifndef ESP_CU
   peerInfoController();
 #endif
 }
@@ -75,10 +69,7 @@ void onDataReceive(const byte *mac, const byte *data, const int len) {
   receiverHydreonData(data);
   receiverAnemometerData(data);
 #endif
-#ifdef ESP_OU
-  receiverPeerInfoResponse(data);
-#endif
-#ifdef ESP_SU
+#ifndef ESP_CU
   receiverPeerInfoResponse(data);
 #endif
 }
