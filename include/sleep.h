@@ -5,7 +5,7 @@
 
 static const int SLEEP_DELAY_TIME = 100;
 static const int SLEEP_US_TO_S_FACTOR = 1000000;
-static const int SLEEP_WAKE_UP_TIME = 1 * SLEEP_US_TO_S_FACTOR;
+static const int SLEEP_WAKE_UP_TIME = 5 * SLEEP_US_TO_S_FACTOR;
 
 enum SleepState {
   SLEEP_IDLE,

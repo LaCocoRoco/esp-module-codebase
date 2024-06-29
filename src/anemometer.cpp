@@ -33,6 +33,7 @@ void anemometerController() {
       }
 
       if (anemometerWakeupEvent) {
+        anemometerWakeupEvent = false;
         anemometerState = ANEMOMETER_UPDATE_VELOCITY;
       }
 
