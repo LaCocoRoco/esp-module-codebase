@@ -62,8 +62,8 @@ void onDataSent(const byte *mac, const esp_now_send_status_t status) {
     if (WiFi.channel() != wifiChannel) {
       logger(TRACE, "ERROR: EspNow PeerInfo Channel Mismatch");
     }
-  }
 #endif
+  }
 }
 
 void onDataReceive(const byte *mac, const byte *data, const int len) {
