@@ -18,7 +18,6 @@
 PeerInfoState peerInfoState;
 esp_now_peer_info_t peerInfo;
 unsigned long peerInfoTime;
-int espNowChannelMonitor;
 int peerInfoRequestChannel;
 int peerInfoRequestRetrys;
 bool peerInfoRequest;
@@ -36,7 +35,6 @@ void setupEspNow() {
   esp_now_init();
   esp_now_register_send_cb(onDataSent);
   esp_now_register_recv_cb(onDataReceive);
-  espNowChannelMonitor = wifiChannel;
 #ifdef ESP_OU
   peerInfoSetup();
 #endif
@@ -102,12 +100,6 @@ void peerInfoController() {
   switch (peerInfoState) {
     case PEER_INFO_IDLE: {
       if (wifiState == WIFI_IDLE) {
-        if (espNowChannelMonitor != wifiChannel) {
-          Serial.println("espNowChannelMonitor");
-          espNowChannelMonitor = wifiChannel;
-          peerInfoRequest = true;
-        }
-
         if (peerInfoRequest) {
           logger(TRACE, "Peer Info Request Initialized");
           wifiInitializeStandalone = true;
