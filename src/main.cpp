@@ -6,7 +6,6 @@
 #include <sleep.h>
 #include <socket.h>
 #include <system.h>
-#include <task.h>
 #ifdef ESP_CU
 #include <io.h>
 #endif
@@ -20,7 +19,6 @@
 #endif
 
 void setup() {
-  setupTask();
   setupSettings();
   setupSerial();
   setupSleep();
@@ -36,10 +34,6 @@ void setup() {
 }
 
 void loop() {
-  taskLoop();
-}
-
-void task() {
   taskSerial();
   taskSleep();
   taskNetwork();
