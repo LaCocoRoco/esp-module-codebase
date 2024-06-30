@@ -120,6 +120,9 @@ int systemActive() {
 }
 
 void sleepConfiguration() {
+#ifdef ESP_CU
+  esp_sleep_enable_ext0_wakeup(gpio_num_t(GPIO_MOD), LOW);
+#endif
 #ifdef ESP_OU
   esp_sleep_enable_ext0_wakeup(gpio_num_t(GPIO_MOD), LOW);
   esp_sleep_enable_ext1_wakeup(((uint64_t)(((uint64_t)1) << GPIO_CHG)), ESP_EXT1_WAKEUP_ALL_LOW);

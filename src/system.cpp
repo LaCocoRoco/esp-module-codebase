@@ -122,9 +122,9 @@ void changeModeController() {
     case CHANGE_MODE_IDLE: {
       if (changeMode) {
         switch (mode) {
-          /* 1 Buzzer Signal: Low Power Mode */
+          /* 1 Buzzer Signal: Web Mode       */
           /* 2 Buzzer Signal: Hyprid Mode    */
-          /* 3 Buzzer Signal: Web Mode       */
+          /* 3 Buzzer Signal: Low Power Mode */
           case MODE_LOW_POWER: changeModeBuzzerIteration = MODE_HYPRID; break;
           case MODE_HYPRID: changeModeBuzzerIteration = MODE_WEB; break;
           case MODE_WEB: changeModeBuzzerIteration = MODE_LOW_POWER; break;
