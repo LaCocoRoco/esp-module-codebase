@@ -7,8 +7,8 @@
 #ifdef ESP_CU
 static const gpio_num_t GPIO_TX0 = GPIO_NUM_1;
 static const gpio_num_t GPIO_RX0 = GPIO_NUM_3;
-static const gpio_num_t GPIO_MOD = GPIO_NUM_34;  // ORG:GPIO_NUM_12 DEV:GPIO_NUM_34
-static const gpio_num_t GPIO_BUZ = GPIO_NUM_15;  // ORG:GPIO_NUM_14 DEV:GPIO_NUM_15
+static const gpio_num_t GPIO_MOD = GPIO_NUM_34;
+static const gpio_num_t GPIO_BUZ = GPIO_NUM_15;
 static const gpio_num_t GPIO_MR = GPIO_NUM_4;
 static const gpio_num_t GPIO_DS = GPIO_NUM_25;
 static const gpio_num_t GPIO_SHCP = GPIO_NUM_26;
