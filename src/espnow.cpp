@@ -49,12 +49,17 @@ void taskEspNow() {
 void onDataSent(const byte *mac, const esp_now_send_status_t status) {
   if (!peerInfoRequest) {
     if (status != ESP_NOW_SEND_SUCCESS) {
-      logger(TRACE, "ERROR: EspNow Send Failure");
+      logger(TRACE, "EspNow Send Failure");
+      logger(ERROR, "MAC Address:     " + macToString(mac));
+      logger(ERROR, "Channel Current: " + WiFi.channel());
+      logger(ERROR, "Channel Actual:  " + wifiChannel);
     }
 
 #ifndef ESP_CU
     if (WiFi.channel() != wifiChannel) {
-      logger(TRACE, "ERROR: EspNow PeerInfo Channel Mismatch");
+      logger(TRACE, "EspNow PeerInfo Channel Mismatch");
+      logger(ERROR, "Channel Current: " + WiFi.channel());
+      logger(ERROR, "Channel Actual:  " + wifiChannel);
     }
 #endif
   }

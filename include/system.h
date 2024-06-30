@@ -34,9 +34,9 @@ enum ModeButtonState {
 
 enum ModeState {
   MODE_NONE,
-  MODE_WEB,
-  MODE_HYPRID,
   MODE_LOW_POWER,
+  MODE_HYPRID,
+  MODE_WEB,
 };
 
 extern ModeState mode;

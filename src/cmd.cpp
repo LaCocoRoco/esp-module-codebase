@@ -1,5 +1,7 @@
 #include "cmd.h"
 
+#include <WiFi.h>
+#include <config.h>
 #include <espnow.h>
 #include <gpio.h>
 #include <logger.h>
@@ -44,6 +46,7 @@ void cmdHandler(String text) {
     logger(TRACE, "AT RESTART:      Restart Module");
     logger(TRACE, "AT SCANNER:      Scan for Wifi Networks");
     logger(TRACE, "AT PEERINFO:     Request new PeerInfo");
+    logger(TRACE, "AT NETWORK:      Print Network Data");
     logger(TRACE, "AT LOG TRACE:    Log Level Trace");
     logger(TRACE, "AT LOG DEBUG:    Log Level Debug");
     logger(TRACE, "AT LOG INFO:     Log Level Info");
@@ -52,12 +55,10 @@ void cmdHandler(String text) {
     logger(TRACE, "AT MODE LOW:     Activate Low Power Mode");
     logger(TRACE, "AT MODE HYPRID:  Activate Hyprid Mode");
     logger(TRACE, "AT MODE WEB:     Activate Web Mode");
-
 #ifdef ESP_OU
     logger(TRACE, "TC REGISTER:     Log Touch Register Data");
     logger(TRACE, "TC CALIBRATE:    Calibrate Touch Sensor");
 #endif
-
 #ifdef ESP_SU
     logger(TRACE, "HD READ:         Hydreon Read Data");
     logger(TRACE, "HD RESTART:      Hydreon Restart");
@@ -88,8 +89,18 @@ void cmdHandler(String text) {
     }
 
     if (cmd2 == "peerinfo") {
-      logger(TRACE, "Request new PeerInfo");
+      logger(TRACE, "Request new PeerInfo", false);
       peerInfoRequest = true;
+    }
+
+    if (cmd2 == "network") {
+      logger(TRACE, "SSID:           " + WiFi.SSID());
+      logger(TRACE, "IPAddress:      " + WiFi.localIP().toString());
+      logger(TRACE, "Hostname:       " + MODULE_HOSTNAME + ".local");
+      logger(TRACE, "MAC WiFi:       " + WiFi.macAddress());
+      logger(TRACE, "MAC EspNow:     " + macToString(espNowMac));
+      logger(TRACE, "Channel WiFi:   " + String(WiFi.channel()));
+      logger(TRACE, "Channel EspNow: " + String(wifiChannel));
     }
 
     if (cmd2 == "restart") {
