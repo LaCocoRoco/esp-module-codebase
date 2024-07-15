@@ -6,34 +6,6 @@
 #include <Arduino.h>
 #include <driver/adc.h>
 
-const int INPUT_SIZE = 12;
-const int OUTPUT_SIZE = 16;
-const int MOTOR_MAX_ON_TIME = 60000;
-const int LIGHT_DIMMER_TIME = 200;
-
-enum LightState {
-  LIGHT_IDLE,
-  LIGHT_DIMMER_ENABLE,
-  LIGHT_DIMMER_DISABLE,
-  LIGHT_DIMMER_TIME_ON,
-  LIGHT_DIMMER_TIME_OFF,
-};
-
-enum KeyInputMap {
-  KEY00_INPUT06,
-  KEY01_INPUT05,
-  KEY02_INPUT04,
-  KEY03_INPUT03,
-  KEY04_INPUT01,
-  KEY05_INPUT02,
-  KEY06_INPUT09,
-  KEY07_INPUT12,
-  KEY08_INPUT11,
-  KEY09_INPUT07,
-  KEY10_INPUT08,
-  KEY11_INPUT10,
-};
-
 union InputUnion {
   int state;
   struct {
@@ -78,34 +50,17 @@ union OutputUnion {
   };
 };
 
-struct Timer {
-  unsigned long time01;
-  unsigned long time02;
-  unsigned long time03;
-  unsigned long time04;
-  unsigned long time05;
-  unsigned long time06;
-  unsigned long time07;
-  unsigned long time08;
-  unsigned long time09;
-  unsigned long time10;
-};
-
 struct Io {
   InputUnion inputs;
   OutputUnion outputs;
 };
 
 extern Io io;
-extern int anemometerVelocity;
 extern bool hydreonStatus;
+extern int anemometerVelocity;
 
 void taskIo();
-void sensorController();
-void lightController();
-void inputController();
-void outputController();
-void inputHandler(String name, bool state);
+void ioHandler(String name, bool state);
 
 #endif
 #endif

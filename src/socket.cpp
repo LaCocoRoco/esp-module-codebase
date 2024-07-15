@@ -118,7 +118,7 @@ void socketReceiveButton(const JsonObject data) {
   const bool state = data["state"];
   cmdHandler(name);
 #ifdef ESP_CU
-  inputHandler(name, state);
+  ioHandler(name, state);
 #endif
 }
 
