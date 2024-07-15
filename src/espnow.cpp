@@ -50,18 +50,12 @@ void onDataSent(const byte *mac, const esp_now_send_status_t status) {
   if (!peerInfoRequest) {
     if (status != ESP_NOW_SEND_SUCCESS) {
       logger(TRACE, "EspNow Send Failure");
-      logger(ERROR, "MAC Address:     " + macToString(mac));
-      logger(ERROR, "Channel Current: " + WiFi.channel());
-      logger(ERROR, "Channel Actual:  " + wifiChannel);
+      // TODO: probably channel changed
+      // TODO: only do this sometimes
+      // TODO: resend hydreon data with wakeup call ?
+      // TODO: probably force resend some data
+      peerInfoRequest = true;
     }
-
-#ifndef ESP_CU
-    if (WiFi.channel() != wifiChannel) {
-      logger(TRACE, "EspNow PeerInfo Channel Mismatch");
-      logger(ERROR, "Channel Current: " + WiFi.channel());
-      logger(ERROR, "Channel Actual:  " + wifiChannel);
-    }
-#endif
   }
 }
 

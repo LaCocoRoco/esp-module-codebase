@@ -28,8 +28,10 @@ void anemometerController() {
 
   switch (anemometerState) {
     case ANEMOMETER_IDLE: {
-      if (anemometerThreshold(velocity)) {
-        anemometerState = ANEMOMETER_UPDATE_VELOCITY;
+      if (millis() > anemometerTime + ANEMOMETER_UPDATE_INTERVAL) {
+        if (anemometerThreshold(anemometerAnalog)) {
+          anemometerState = ANEMOMETER_UPDATE_VELOCITY;
+        }
       }
 
       if (anemometerWakeupEvent) {
@@ -58,6 +60,7 @@ void anemometerController() {
     }
 
     case ANEMOMETER_ESP_NOW_SEND: {
+      anemometerTime = millis();
       epsNowSendAnemometerData(anemometerVelocity);
       anemometerState = ANEMOMETER_IDLE;
       break;

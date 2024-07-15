@@ -203,17 +203,6 @@ function transmitButtonEvent(event) {
   });
 }
 
-/************/
-/** SYSTEM **/
-/************/
-
-function systemUpdate(data) {
-  const voltage = data.batteryVoltage;
-  if (voltage && systemBattery.innerHTML != voltage) {
-    systemBattery.innerHTML = voltage;
-  }
-}
-
 /**************/
 /** TERMINAL **/
 /**************/

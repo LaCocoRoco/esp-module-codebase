@@ -36,7 +36,6 @@ void requestHandlerIndexHtml(AsyncWebServerRequest *request) {
     if (var == "touchModule") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "inputModule") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "outputModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "battery") return String(batteryVoltage);
     if (var == "anemometerVelocity") return String(anemometerVelocity);
     if (var == "hydreonStatus") return String(hydreonStatus);
     if (var == "hydreonIntensity") return String(hydreonIntensity);
@@ -45,7 +44,6 @@ void requestHandlerIndexHtml(AsyncWebServerRequest *request) {
     if (var == "touchModule") return WEB_ELEMENT_DISPLAY_BLOCK;
     if (var == "inputModule") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "outputModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "battery") return String(batteryVoltage);
     if (var == "chipId") return String(at42qt2120.chipID.value);
     if (var == "firmwareMajor") return String(at42qt2120.firmwareVersion.majorVersion);
     if (var == "firmwareMinor") return String(at42qt2120.firmwareVersion.minorVersion);

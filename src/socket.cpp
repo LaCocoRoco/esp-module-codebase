@@ -204,40 +204,35 @@ void socketTransmitUpdate(bool update) {
   const JsonObject index1 = data.createNestedObject();
   const JsonObject index2 = data.createNestedObject();
   const JsonObject index3 = data.createNestedObject();
-  const JsonObject index4 = data.createNestedObject();
   const JsonObject data0 = index0.createNestedObject("data");
   const JsonObject data1 = index1.createNestedObject("data");
   const JsonObject data2 = index2.createNestedObject("data");
   const JsonObject data3 = index3.createNestedObject("data");
-  const JsonObject data4 = index4.createNestedObject("data");
 
   index0["id"] = "ping";
-  index1["id"] = "system";
-  index2["id"] = "terminal";
+  index1["id"] = "terminal";
 #ifdef ESP_CU
-  index3["id"] = "sensor";
-  index4["id"] = "output";
+  index2["id"] = "sensor";
+  index3["id"] = "output";
 #endif
 #ifdef ESP_OU
-  index3["id"] = "touch";
+  index2["id"] = "touch";
 #endif
 #ifdef ESP_SU
-  index3["id"] = "sensor";
+  index2["id"] = "sensor";
 #endif
   data0["isAlive"] = true;
-#ifndef ESP_CU
-  data1["batteryVoltage"] = String(batteryVoltage, 2);
-#endif
-  if (socketEvaluateTerminalData(&data2)) update = true;
+
+  if (socketEvaluateTerminalData(&data1)) update = true;
 #ifdef ESP_CU
-  if (socketEvaluateSensorData(&data3)) update = true;
-  if (socketEvaluateInputData(&data4)) update = true;
+  if (socketEvaluateSensorData(&data2)) update = true;
+  if (socketEvaluateInputData(&data3)) update = true;
 #endif
 #ifdef ESP_OU
-  if (socketEvaluateTouchData(&data3)) update = true;
+  if (socketEvaluateTouchData(&data2)) update = true;
 #endif
 #ifdef ESP_SU
-  if (socketEvaluateSensorData(&data3)) update = true;
+  if (socketEvaluateSensorData(&data2)) update = true;
 #endif
 
   if (update) {

@@ -8,6 +8,7 @@
 static const int ANEMOMETER_UPDATE_THRESHOLD = 2;
 static const int ANEMOMETER_ACTIVATION_THRESHOLD = 5;
 static const int ANEMOMETER_CALIBRATE_CALM_DOWN_TIME = 5000;
+static const int ANEMOMETER_UPDATE_INTERVAL = 500;
 
 enum AnemometerState {
   ANEMOMETER_IDLE,
