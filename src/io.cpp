@@ -19,7 +19,6 @@ LightState disableLightState;
 int dissableLightIteration;
 int disableLightDimmerTime;
 bool disableLight;
-bool RTC_DATA_ATTR inputsBlocked;
 
 void taskIo() {
   inputController();
@@ -72,21 +71,6 @@ void inputController() {
   // update inputs
   if (io.inputs.state ^ ioBuffer.inputs.state) {
     ioBuffer.inputs.state = io.inputs.state ^ ioBuffer.inputs.state;
-
-    // block inputs event
-    if (ioBuffer.inputs.input09) {
-      // block inputs pressed
-      if (io.inputs.input09) {
-        // block inputs enabled/disabled
-        inputsBlocked = !inputsBlocked;
-      }
-    }
-
-    // inputs blocked
-    if (inputsBlocked) {
-      // reset inputs state
-      ioBuffer.inputs.state = io.inputs.state = 0;
-    }
 
     // motor left up event
     if (ioBuffer.inputs.input05) {
@@ -317,7 +301,7 @@ void lightController() {
   }
 }
 
-void inputHandler(String name, bool state) {
+void ioHandler(String name, bool state) {
   if (name == "input01") io.inputs.input01 = state;
   if (name == "input02") io.inputs.input02 = state;
   if (name == "input03") io.inputs.input03 = state;

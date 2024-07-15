@@ -19,21 +19,6 @@ enum LightState {
   LIGHT_DIMMER_TIME_OFF,
 };
 
-enum KeyInputMap {
-  KEY00_INPUT06,
-  KEY01_INPUT05,
-  KEY02_INPUT04,
-  KEY03_INPUT03,
-  KEY04_INPUT01,
-  KEY05_INPUT02,
-  KEY06_INPUT09,
-  KEY07_INPUT12,
-  KEY08_INPUT11,
-  KEY09_INPUT07,
-  KEY10_INPUT08,
-  KEY11_INPUT10,
-};
-
 union InputUnion {
   int state;
   struct {
@@ -105,7 +90,7 @@ void sensorController();
 void lightController();
 void inputController();
 void outputController();
-void inputHandler(String name, bool state);
+void ioHandler(String name, bool state);
 
 #endif
 #endif
