@@ -22,6 +22,7 @@ int peerInfoRequestChannel;
 int peerInfoRequestRetrys;
 bool peerInfoRequest;
 bool peerInfoReceived;
+RTC_DATA_ATTR bool espNowSendError;
 byte espNowMac[ESP_NOW_MAC_SIZE] = {0};
 EspNowData espNowData;
 EspNowPeerInfoResponse espNowPeerInfoResponse;
@@ -49,12 +50,19 @@ void taskEspNow() {
 void onDataSent(const byte *mac, const esp_now_send_status_t status) {
   if (!peerInfoRequest) {
     if (status != ESP_NOW_SEND_SUCCESS) {
+      // It is not immediately clear why the EspNow transmission failed.
+      // The receiver might be unreachable, or there could be an issue with the WiFi channel configuration.
+      // If the module is operating in low power mode, it is also not directly connected to the WiFi network.
+      // Consequently, there is a possibility that the network has changed the channel.
+      // As an error routine, a new peer information request is initiated.
+      // However, this could drain the battery due to the time required for execution.
       logger(TRACE, "EspNow Send Failure");
-      // TODO: probably channel changed
-      // TODO: only do this sometimes
-      // TODO: resend hydreon data with wakeup call ?
-      // TODO: probably force resend some data
       peerInfoRequest = true;
+      espNowSendError = true;
+    } else {
+      // TODO: should only happen when peerInfoRequest is finished
+      // TODO: hopefully can be used for failure recovery
+      espNowSendError = false;
     }
   }
 }
@@ -92,7 +100,6 @@ void peerInfoController() {
       if (wifiState == WIFI_IDLE) {
         if (peerInfoRequest) {
           logger(TRACE, "Peer Info Request Initialized");
-          wifiInitializeStandalone = true;
           peerInfoRequestRetrys = 0;
           peerInfoRequestChannel = 1;
           peerInfoState = PEER_INFO_REQUEST_SEND;
@@ -268,6 +275,8 @@ void receiverAnemometerData(const byte *data) {
 
 #ifdef ESP_OU
 void espNowSendTouchData(int key, bool state) {
+  if (peerInfoRequest) return;
+
   espNowTouchData.key = key;
   espNowTouchData.state = state;
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
@@ -280,6 +289,8 @@ void espNowSendTouchData(int key, bool state) {
 
 #ifdef ESP_SU
 void epsNowSendAnemometerData(int velocity) {
+  if (peerInfoRequest) return;
+
   espNowAnemometerData.velocity = velocity;
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_send(espNowMac, (byte *)&espNowAnemometerData, sizeof(EspNowAnemometerData));
@@ -288,6 +299,8 @@ void epsNowSendAnemometerData(int velocity) {
 }
 
 void espNowSendHydreonData(bool status) {
+  if (peerInfoRequest) return;
+
   espNowHydreonData.status = status;
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_send(espNowMac, (byte *)&espNowHydreonData, sizeof(EspNowHydreonData));

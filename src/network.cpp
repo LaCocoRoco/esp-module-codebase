@@ -42,8 +42,8 @@ void wifiController() {
     case WIFI_IDLE: {
       if (mode == MODE_WEB) {
         if (wifiMode == WIFI_MODE_STA) {
-          // ESP-NOW only works reliably in WIFI_AP_STA mode
-          // Therefore, we use a custom wifiMode struct to keep track of it
+          // EspNow only works reliably in WIFI_AP_STA mode.
+          // Therefore, we use a custom wifiMode struct to keep track of it.
           if (WiFi.status() != WL_CONNECTED) {
             logger(TRACE, "Wifi Retry Connect Station");
             wifiState = WIFI_NETWORK_INITIALIZE;
