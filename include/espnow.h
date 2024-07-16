@@ -32,13 +32,11 @@ struct EspNowData {
 
 struct EspNowPeerInfoResponse {
   const char id[ESP_NOW_ID_SIZE] = {"PeerInfoResponse"};
-  int channel;
   byte mac[ESP_NOW_MAC_SIZE] = {0};
 };
 
 struct EspNowPeerInfoRequest {
   const char id[ESP_NOW_ID_SIZE] = {"PeerInfoRequest"};
-  int channel;
   byte mac[ESP_NOW_MAC_SIZE] = {0};
 };
 

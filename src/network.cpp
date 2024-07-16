@@ -27,10 +27,11 @@ unsigned long wifiTime;
 int scanner;
 
 void setupNetwork() {
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
-  wifiMode = WIFI_AP_STA;
-  wifiInitializeNetwork = true;
+  if (mode == MODE_WEB) {
+    wifiInitializeNetwork = true;
+  } else {
+    wifiInitializeStandalone = true;
+  }
 }
 
 void taskNetwork() {
@@ -40,41 +41,38 @@ void taskNetwork() {
 void wifiController() {
   switch (wifiState) {
     case WIFI_IDLE: {
-      if (mode == MODE_WEB) {
-        if (wifiMode == WIFI_MODE_STA) {
-          // EspNow only works reliably in WIFI_AP_STA mode.
-          // Therefore, we use a custom wifiMode struct to keep track of it.
-          if (WiFi.status() != WL_CONNECTED) {
-            logger(TRACE, "Wifi Retry Connect Station");
-            wifiState = WIFI_NETWORK_INITIALIZE;
-          }
-        }
-
-        if (wifiInitializeNetwork) {
-          wifiInitializeNetwork = false;
+      if (wifiMode == WIFI_MODE_STA) {
+        if (WiFi.status() != WL_CONNECTED) {
+          logger(TRACE, "Wifi Retry Connect Station");
           wifiState = WIFI_NETWORK_INITIALIZE;
         }
-
-        if (wifiInitializeUpdate) {
-          wifiInitializeUpdate = false;
-          wifiState = WIFI_UPDATE_INITIALIZE;
-        }
-
-        if (wifiInitializeScanner) {
-          wifiInitializeScanner = false;
-          wifiState = WIFI_SCANNER_INITIALIZE;
-        }
-
-        if (wifiInitializeStandalone) {
-          wifiInitializeStandalone = false;
-          wifiState = WIFI_STANDALONE_INITIALIZE;
-        }
-
-        if (wifiReset) {
-          wifiReset = false;
-          wifiState = WIFI_RESET;
-        }
       }
+
+      if (wifiInitializeNetwork) {
+        wifiInitializeNetwork = false;
+        wifiState = WIFI_NETWORK_INITIALIZE;
+      }
+
+      if (wifiInitializeUpdate) {
+        wifiInitializeUpdate = false;
+        wifiState = WIFI_UPDATE_INITIALIZE;
+      }
+
+      if (wifiInitializeScanner) {
+        wifiInitializeScanner = false;
+        wifiState = WIFI_SCANNER_INITIALIZE;
+      }
+
+      if (wifiInitializeStandalone) {
+        wifiInitializeStandalone = false;
+        wifiState = WIFI_STANDALONE_INITIALIZE;
+      }
+
+      if (wifiReset) {
+        wifiReset = false;
+        wifiState = WIFI_RESET;
+      }
+
       break;
     }
 
@@ -116,7 +114,8 @@ void wifiController() {
         logger(TRACE, "IPAddress: " + WiFi.localIP().toString());
         logger(TRACE, "Channel:   " + String(WiFi.channel()));
         wifiAddress = WiFi.localIP();
-        wifiState = WIFI_IDLE;
+        wifiChannel = WiFi.channel();
+        wifiState = WIFI_NETWORK_MANAGE_CHANNEL;
       }
 
       break;
@@ -130,6 +129,16 @@ void wifiController() {
       logger(TRACE, "Channel:   " + String(WiFi.channel()));
       dnsServer.start(53, "*", WiFi.softAPIP());
       wifiAddress = WIFI_APIP;
+      wifiChannel = 1;
+      wifiState = WIFI_NETWORK_MANAGE_CHANNEL;
+      break;
+    }
+
+    case WIFI_NETWORK_MANAGE_CHANNEL: {
+      if (wifiChannel != preferences.getInt(PREFERENCES_KEY_WIFI_CHANNEL)) {
+        preferences.putInt(PREFERENCES_KEY_WIFI_CHANNEL, wifiChannel);
+      }
+
       wifiState = WIFI_IDLE;
       break;
     }
