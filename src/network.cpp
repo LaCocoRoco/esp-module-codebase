@@ -86,13 +86,13 @@ void wifiController() {
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
         logger(TRACE, "Wifi Connect Station");
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
-        WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
+        WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
         wifiTime = millis();
         wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
         logger(TRACE, "Wifi Setup Access Point");
-        WiFi.softAP(MODULE_SSID.c_str(), NULL, wifiChannel, 0);
+        WiFi.softAP(MODULE_SSID.c_str(), NULL, WIFI_AP_CHANNEL, 0);
         WiFi.softAPConfig(WIFI_APIP, WIFI_GATEWAY, WIFI_SUBNET);
         wifiMode = WIFI_AP;
         wifiState = WIFI_NETWORK_ACCESS_POINT;
@@ -129,7 +129,7 @@ void wifiController() {
       logger(TRACE, "Channel:   " + String(WiFi.channel()));
       dnsServer.start(53, "*", WiFi.softAPIP());
       wifiAddress = WIFI_APIP;
-      wifiChannel = 1;
+      wifiChannel = WIFI_AP_CHANNEL;
       wifiState = WIFI_NETWORK_MANAGE_CHANNEL;
       break;
     }
