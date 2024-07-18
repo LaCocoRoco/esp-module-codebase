@@ -22,7 +22,6 @@ int peerInfoRequestChannel;
 int peerInfoRequestRetrys;
 bool peerInfoRequest;
 bool peerInfoReceived;
-RTC_DATA_ATTR bool espNowSendError;
 byte espNowMac[ESP_NOW_MAC_SIZE] = {0};
 EspNowData espNowData;
 EspNowPeerInfoResponse espNowPeerInfoResponse;
@@ -32,7 +31,6 @@ EspNowHydreonData espNowHydreonData;
 EspNowAnemometerData espNowAnemometerData;
 
 void setupEspNow() {
-  esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_init();
   esp_now_register_send_cb(onDataSent);
   esp_now_register_recv_cb(onDataReceive);
@@ -48,22 +46,7 @@ void taskEspNow() {
 }
 
 void onDataSent(const byte *mac, const esp_now_send_status_t status) {
-  if (!peerInfoRequest) {
-    if (status != ESP_NOW_SEND_SUCCESS) {
-      // It is not immediately clear why the EspNow transmission failed.
-      // The receiver might be unreachable, or there could be an issue with the WiFi channel configuration.
-      // If the module is operating in low power mode, it is also not directly connected to the WiFi network.
-      // Consequently, there is a possibility that the network has changed the channel.
-      // As an error routine, a new peer information request is initiated.
-      // However, this could drain the battery due to the time required for execution.
-      logger(TRACE, "EspNow Send Failure");
-      peerInfoRequest = true;
-      espNowSendError = true;
-    } else {
-      // TODO: should only happen when peerInfoRequest is finished
-      // TODO: hopefully can be used for failure recovery
-      espNowSendError = false;
-    }
+  if (status != ESP_NOW_SEND_SUCCESS) {
   }
 }
 
@@ -99,6 +82,21 @@ void peerInfoController() {
     case PEER_INFO_IDLE: {
       if (wifiState == WIFI_IDLE) {
         if (peerInfoRequest) {
+          /** TODO:
+           * Command "at peerinfo" should not work in STA Mode
+           * WIFI_STA_AP schould also not work, because both use the same channel
+           * In general it should be necessary to setup standalon for scanning for receiver
+           */
+
+          // if (wifiMode == WIFI_STA_AP) {
+          //   logger(TRACE, "Peer Info Request Initialized");
+          //   peerInfoRequestRetrys = 0;
+          //   peerInfoRequestChannel = 1;
+          //   peerInfoState = PEER_INFO_REQUEST_SEND;
+          // } else {
+          //   wifiInitializeStandalone = true;
+          // }
+
           logger(TRACE, "Peer Info Request Initialized");
           peerInfoRequestRetrys = 0;
           peerInfoRequestChannel = 1;
@@ -110,12 +108,9 @@ void peerInfoController() {
     }
 
     case PEER_INFO_REQUEST_SEND: {
-      espNowPeerInfoRequest.channel = peerInfoRequestChannel;
       esp_read_mac(espNowPeerInfoRequest.mac, ESP_MAC_WIFI_STA);
       esp_wifi_set_channel(peerInfoRequestChannel, WIFI_SECOND_CHAN_NONE);
       esp_now_send(ESP_NOW_MAC_BROADCAST, (byte *)&espNowPeerInfoRequest, sizeof(EspNowPeerInfoRequest));
-
-      logger(DEBUG, "Send Peer Info Channel: " + String(espNowPeerInfoRequest.channel));
       logger(DEBUG, "Send Peer Info Address: " + macToString(espNowPeerInfoRequest.mac));
 
       peerInfoTime = millis();
@@ -195,15 +190,10 @@ void receiverPeerInfoResponse(const byte *data) {
   if (String(espNowData.id) == String(espNowPeerInfoResponse.id)) {
     memcpy(&espNowPeerInfoResponse, data, sizeof(EspNowPeerInfoResponse));
 
-    if (espNowPeerInfoResponse.channel != wifiChannel) {
-      preferences.putInt(PREFERENCES_KEY_WIFI_CHANNEL, espNowPeerInfoResponse.channel);
-    }
-
     if (memcmp(espNowPeerInfoResponse.mac, ::espNowMac, ESP_NOW_MAC_SIZE)) {
       preferences.putBytes(PREFERENCES_KEY_ESP_NOW_MAC, espNowPeerInfoResponse.mac, ESP_NOW_MAC_SIZE);
     }
 
-    logger(DEBUG, "Recv Peer Info Channel: " + String(espNowPeerInfoResponse.channel));
     logger(DEBUG, "Recv Peer Info Address: " + macToString(espNowPeerInfoResponse.mac));
 
     peerInfoReceived = true;
@@ -217,15 +207,11 @@ void receiverPeerInfoRequest(const byte *data, const byte *mac) {
 
     memcpy(peerInfo.peer_addr, espNowPeerInfoRequest.mac, ESP_NOW_MAC_SIZE);
     esp_now_add_peer(&peerInfo);
-
-    logger(DEBUG, "Recv Peer Info Channel: " + String(espNowPeerInfoRequest.channel));
     logger(DEBUG, "Recv Peer Info Address: " + macToString(espNowPeerInfoRequest.mac));
 
     espNowPeerInfoResponse.channel = WiFi.channel();
     esp_read_mac(espNowPeerInfoResponse.mac, ESP_MAC_WIFI_STA);
     esp_now_send(mac, (byte *)&espNowPeerInfoResponse, sizeof(EspNowPeerInfoResponse));
-
-    logger(DEBUG, "Send Peer Info Channel: " + String(espNowPeerInfoResponse.channel));
     logger(DEBUG, "Send Peer Info Address: " + macToString(espNowPeerInfoResponse.mac));
   }
 }
@@ -258,7 +244,6 @@ void receiverHydreonData(const byte *data) {
   if (String(espNowData.id) == String(espNowHydreonData.id)) {
     memcpy(&espNowHydreonData, data, sizeof(EspNowHydreonData));
     hydreonStatus = espNowHydreonData.status;
-
     logger(DEBUG, "Recv Hydreon Status: " + String(espNowHydreonData.status));
   }
 }
@@ -267,7 +252,6 @@ void receiverAnemometerData(const byte *data) {
   if (String(espNowData.id) == String(espNowAnemometerData.id)) {
     memcpy(&espNowAnemometerData, data, sizeof(EspNowAnemometerData));
     anemometerVelocity = espNowAnemometerData.velocity;
-
     logger(DEBUG, "Recv Anemometer Velocity: " + String(espNowAnemometerData.velocity));
   }
 }
@@ -281,7 +265,6 @@ void espNowSendTouchData(int key, bool state) {
   espNowTouchData.state = state;
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_send(espNowMac, (byte *)&espNowTouchData, sizeof(EspNowTouchData));
-
   logger(DEBUG, "Send Touch Key:   " + String(espNowTouchData.key));
   logger(DEBUG, "Send Touch State: " + String(espNowTouchData.state));
 }
@@ -294,7 +277,6 @@ void epsNowSendAnemometerData(int velocity) {
   espNowAnemometerData.velocity = velocity;
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_send(espNowMac, (byte *)&espNowAnemometerData, sizeof(EspNowAnemometerData));
-
   logger(DEBUG, "Send Anemometer Velocity: " + String(espNowAnemometerData.velocity));
 }
 
@@ -304,7 +286,6 @@ void espNowSendHydreonData(bool status) {
   espNowHydreonData.status = status;
   esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
   esp_now_send(espNowMac, (byte *)&espNowHydreonData, sizeof(EspNowHydreonData));
-
   logger(DEBUG, "Send Hydreon Status: " + String(espNowHydreonData.status));
 }
 #endif
