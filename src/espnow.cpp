@@ -98,20 +98,26 @@ void peerInfoController() {
           // }
 
           logger(TRACE, "Peer Info Request Initialized");
-          peerInfoRequestRetrys = 0;
-          peerInfoRequestChannel = 1;
-          peerInfoState = PEER_INFO_REQUEST_SEND;
+          peerInfoState = PEER_INFO_REQUEST_INITIALIZE;
         }
       }
 
       break;
     }
 
-    case PEER_INFO_REQUEST_SEND: {
+    case PEER_INFO_REQUEST_INITIALIZE: {
       esp_read_mac(espNowPeerInfoRequest.mac, ESP_MAC_WIFI_STA);
+      logger(DEBUG, "Send Peer Info Address: " + macToString(espNowPeerInfoRequest.mac));
+      peerInfoRequestRetrys = 0;
+      peerInfoRequestChannel = 1;
+      peerInfoState = PEER_INFO_REQUEST_SEND;
+      break;
+    }
+
+    case PEER_INFO_REQUEST_SEND: {
       esp_wifi_set_channel(peerInfoRequestChannel, WIFI_SECOND_CHAN_NONE);
       esp_now_send(ESP_NOW_MAC_BROADCAST, (byte *)&espNowPeerInfoRequest, sizeof(EspNowPeerInfoRequest));
-      logger(DEBUG, "Send Peer Info Address: " + macToString(espNowPeerInfoRequest.mac));
+      logger(DEBUG, "Send Peer Info Channel: " + String(peerInfoRequestChannel));
 
       peerInfoTime = millis();
       peerInfoState = PEER_INFO_AWAIT_RESPONSE;
@@ -126,7 +132,7 @@ void peerInfoController() {
           peerInfoState = PEER_INFO_REQUEST_TIMEOUT;
         } else if (peerInfoRequestChannel > ESP_NOW_WIFI_CHANNEL_SIZE) {
           peerInfoRequestRetrys++;
-          peerInfoRequestChannel = 0;
+          peerInfoRequestChannel = 1;
           peerInfoState = PEER_INFO_REQUEST_SEND;
         } else {
           peerInfoRequestChannel++;

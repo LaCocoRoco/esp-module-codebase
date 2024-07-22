@@ -27,11 +27,9 @@ unsigned long wifiTime;
 int scanner;
 
 void setupNetwork() {
-  if (mode == MODE_WEB) {
-    wifiInitializeNetwork = true;
-  } else {
-    wifiInitializeStandalone = true;
-  }
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP("HIDDEN", NULL, WWIFI_AP_CHANNEL, 1);
+  wifiMode = WIFI_AP_STA;
 }
 
 void taskNetwork() {
@@ -86,13 +84,13 @@ void wifiController() {
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
         logger(TRACE, "Wifi Connect Station");
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
-        WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
+        WiFi.softAP("HIDDEN", NULL, WWIFI_AP_CHANNEL, 1);
         wifiTime = millis();
         wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
         logger(TRACE, "Wifi Setup Access Point");
-        WiFi.softAP(MODULE_SSID.c_str(), NULL, wifiChannel, 0);
+        WiFi.softAP(MODULE_SSID.c_str(), NULL, WWIFI_AP_CHANNEL, 0);
         WiFi.softAPConfig(WIFI_APIP, WIFI_GATEWAY, WIFI_SUBNET);
         wifiMode = WIFI_AP;
         wifiState = WIFI_NETWORK_ACCESS_POINT;
@@ -200,7 +198,7 @@ void wifiController() {
       logger(TRACE, "Wifi Standalone Initialized");
       WiFi.disconnect();
       WiFi.mode(WIFI_AP_STA);
-      WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
+      WiFi.softAP("HIDDEN", NULL, WWIFI_AP_CHANNEL, 1);
       wifiMode = WIFI_AP_STA;
       wifiState = WIFI_IDLE;
       break;

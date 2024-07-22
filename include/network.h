@@ -6,6 +6,7 @@
 static const int WIFI_NETWORK_CONNECT_STATION_TIMEOUT = 20000;
 static const int WIFI_SCANNER_TIMEOUT = 15000;
 static const int WIFI_UPDATE_CONNECTION_TIMEOUT = 5000;
+static const int WWIFI_AP_CHANNEL = 1;
 
 static const IPAddress WIFI_APIP = IPAddress(190, 160, 1, 1);
 static const IPAddress WIFI_GATEWAY = IPAddress(190, 160, 1, 1);
