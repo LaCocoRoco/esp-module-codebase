@@ -127,7 +127,7 @@ void wifiController() {
       logger(TRACE, "Channel:   " + String(WiFi.channel()));
       dnsServer.start(53, "*", WiFi.softAPIP());
       wifiAddress = WIFI_APIP;
-      wifiChannel = 1;
+      wifiChannel = WIFI_AP_CHANNEL;
       wifiState = WIFI_NETWORK_MANAGE_CHANNEL;
       break;
     }
