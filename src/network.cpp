@@ -198,7 +198,7 @@ void wifiController() {
       logger(TRACE, "Wifi Standalone Initialized");
       WiFi.disconnect();
       WiFi.mode(WIFI_AP_STA);
-      WiFi.softAP("HIDDEN", NULL, WWIFI_AP_CHANNEL, 1);
+      WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
       wifiMode = WIFI_AP_STA;
       wifiState = WIFI_IDLE;
       break;
