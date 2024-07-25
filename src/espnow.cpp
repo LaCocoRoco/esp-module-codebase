@@ -47,6 +47,7 @@ void taskEspNow() {
 
 void onDataSent(const byte *mac, const esp_now_send_status_t status) {
   if (status != ESP_NOW_SEND_SUCCESS) {
+    logger(ERROR, "Send Failed");
   }
 }
 
@@ -82,21 +83,6 @@ void peerInfoController() {
     case PEER_INFO_IDLE: {
       if (wifiState == WIFI_IDLE) {
         if (peerInfoRequest) {
-          /** TODO:
-           * Command "at peerinfo" should not work in STA Mode
-           * WIFI_STA_AP schould also not work, because both use the same channel
-           * In general it should be necessary to setup standalon for scanning for receiver
-           */
-
-          // if (wifiMode == WIFI_STA_AP) {
-          //   logger(TRACE, "Peer Info Request Initialized");
-          //   peerInfoRequestRetrys = 0;
-          //   peerInfoRequestChannel = 1;
-          //   peerInfoState = PEER_INFO_REQUEST_SEND;
-          // } else {
-          //   wifiInitializeStandalone = true;
-          // }
-
           logger(TRACE, "Peer Info Request Initialized");
           peerInfoState = PEER_INFO_REQUEST_INITIALIZE;
         }
@@ -109,16 +95,13 @@ void peerInfoController() {
       esp_read_mac(espNowPeerInfoRequest.mac, ESP_MAC_WIFI_STA);
       logger(DEBUG, "Send Peer Info Address: " + macToString(espNowPeerInfoRequest.mac));
       peerInfoRequestRetrys = 0;
-      peerInfoRequestChannel = 1;
       peerInfoState = PEER_INFO_REQUEST_SEND;
       break;
     }
 
     case PEER_INFO_REQUEST_SEND: {
-      esp_wifi_set_channel(peerInfoRequestChannel, WIFI_SECOND_CHAN_NONE);
+      esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
       esp_now_send(ESP_NOW_MAC_BROADCAST, (byte *)&espNowPeerInfoRequest, sizeof(EspNowPeerInfoRequest));
-      logger(DEBUG, "Send Peer Info Channel: " + String(peerInfoRequestChannel));
-
       peerInfoTime = millis();
       peerInfoState = PEER_INFO_AWAIT_RESPONSE;
       break;
@@ -130,12 +113,8 @@ void peerInfoController() {
           peerInfoState = PEER_INFO_REQUEST_SUCCESS;
         } else if (peerInfoRequestRetrys > PEER_INFO_REQUEST_RETRYS) {
           peerInfoState = PEER_INFO_REQUEST_TIMEOUT;
-        } else if (peerInfoRequestChannel > ESP_NOW_WIFI_CHANNEL_SIZE) {
-          peerInfoRequestRetrys++;
-          peerInfoRequestChannel = 1;
-          peerInfoState = PEER_INFO_REQUEST_SEND;
         } else {
-          peerInfoRequestChannel++;
+          peerInfoRequestRetrys++;
           peerInfoState = PEER_INFO_REQUEST_SEND;
         }
       }
@@ -145,7 +124,6 @@ void peerInfoController() {
 
     case PEER_INFO_REQUEST_TIMEOUT: {
       logger(TRACE, "Peer Info Not Received");
-      wifiInitializeNetwork = true;
       peerInfoRequest = false;
       peerInfoState = PEER_INFO_IDLE;
       break;
@@ -179,11 +157,9 @@ void peerInfoController() {
 
     case PEER_INFO_RECEIVED: {
       logger(TRACE, "Peer Info Received");
-      wifiChannel = preferences.getInt(PREFERENCES_KEY_WIFI_CHANNEL);
       preferences.getBytes(PREFERENCES_KEY_ESP_NOW_MAC, espNowMac, ESP_NOW_MAC_SIZE);
       memcpy(peerInfo.peer_addr, espNowMac, ESP_NOW_MAC_SIZE);
       esp_now_add_peer(&peerInfo);
-      wifiInitializeNetwork = true;
       peerInfoRequest = false;
       peerInfoReceived = false;
       peerInfoState = PEER_INFO_IDLE;
@@ -215,7 +191,6 @@ void receiverPeerInfoRequest(const byte *data, const byte *mac) {
     esp_now_add_peer(&peerInfo);
     logger(DEBUG, "Recv Peer Info Address: " + macToString(espNowPeerInfoRequest.mac));
 
-    espNowPeerInfoResponse.channel = WiFi.channel();
     esp_read_mac(espNowPeerInfoResponse.mac, ESP_MAC_WIFI_STA);
     esp_now_send(mac, (byte *)&espNowPeerInfoResponse, sizeof(EspNowPeerInfoResponse));
     logger(DEBUG, "Send Peer Info Address: " + macToString(espNowPeerInfoResponse.mac));

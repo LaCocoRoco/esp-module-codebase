@@ -10,7 +10,7 @@ static const byte ESP_NOW_MAC_SIZE = 6;
 static const byte ESP_NOW_MAC_BROADCAST[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static const byte ESP_NOW_MAC_BLANK[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-static const int PEER_INFO_REQUEST_RETRYS = 2;
+static const int PEER_INFO_REQUEST_RETRYS = 4;
 static const int PEER_INFO_REQUEST_AWAIT_TIME = 100;
 static const int PEER_INFO_REQUEST_BUZZER_TIME = 5;
 
