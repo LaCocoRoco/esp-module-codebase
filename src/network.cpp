@@ -15,6 +15,7 @@
 String wifiSSID;
 String wifiPassword;
 int wifiChannel;
+wifi_mode_t wifiMode;
 WifiState wifiState;
 IPAddress wifiAddress;
 bool wifiInitializeNetwork;
@@ -27,6 +28,8 @@ int scanner;
 
 void setupNetwork() {
   WiFi.mode(WIFI_AP_STA);
+  wifiMode = WIFI_AP_STA;
+
   switch (mode) {
     case MODE_LOW_POWER: {
       wifiInitializeStandalone = true;
@@ -52,7 +55,7 @@ void taskNetwork() {
 void wifiController() {
   switch (wifiState) {
     case WIFI_IDLE: {
-      if (WiFi.getMode() == WIFI_MODE_STA) {
+      if (wifiMode == WIFI_MODE_STA) {
         if (WiFi.status() != WL_CONNECTED) {
           logger(TRACE, "WiFi Retry Connect Station");
           wifiState = WIFI_NETWORK_INITIALIZE;
@@ -99,15 +102,15 @@ void wifiController() {
 
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
         logger(TRACE, "WiFi Connect Station");
-        WiFi.mode(WIFI_STA);
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
         wifiTime = millis();
+        wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
         logger(TRACE, "WiFi Setup Access Point");
-        WiFi.mode(WIFI_AP);
         WiFi.softAP(MODULE_SSID.c_str(), NULL, WIFI_AP_CHANNEL, 0);
         WiFi.softAPConfig(WIFI_APIP, WIFI_GATEWAY, WIFI_SUBNET);
+        wifiMode = WIFI_AP;
         wifiState = WIFI_NETWORK_ACCESS_POINT;
       }
 
@@ -212,8 +215,9 @@ void wifiController() {
     case WIFI_STANDALONE_INITIALIZE: {
       logger(TRACE, "WiFi Standalone Initialized");
       WiFi.disconnect();
-      WiFi.mode(WIFI_AP);
+      WiFi.mode(WIFI_AP_STA);
       WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
+      wifiMode = WIFI_AP;
       wifiState = WIFI_IDLE;
       break;
     }
