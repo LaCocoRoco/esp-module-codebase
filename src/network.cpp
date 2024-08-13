@@ -58,7 +58,7 @@ void wifiController() {
       if (wifiMode == WIFI_MODE_STA) {
         if (WiFi.status() != WL_CONNECTED) {
           logger(TRACE, "WiFi Retry Connect Station");
-          wifiState = WIFI_NETWORK_INITIALIZE;
+          wifiState = WIFI_NETWORK_CONNECT_STATION;
         }
       }
 
@@ -171,7 +171,7 @@ void wifiController() {
         logger(TRACE, "WiFi Update Connected");
         preferences.putString(PREFERENCES_KEY_WIFI_SSID, wifiSSID);
         preferences.putString(PREFERENCES_KEY_WIFI_PASSWORD, wifiPassword);
-        wifiState = WIFI_NETWORK_INITIALIZE;
+        ESP.restart();
       }
 
       if (millis() > wifiTime + WIFI_UPDATE_CONNECTION_TIMEOUT) {

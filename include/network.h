@@ -5,7 +5,7 @@
 
 static const String WIFI_SSID = "";
 static const String WIFI_PASSWORD = "";
-static const int WIFI_NETWORK_CONNECT_STATION_TIMEOUT = 20000;
+static const int WIFI_NETWORK_CONNECT_STATION_TIMEOUT = 10000;
 static const int WIFI_SCANNER_TIMEOUT = 15000;
 static const int WIFI_UPDATE_CONNECTION_TIMEOUT = 5000;
 static const int WIFI_AP_CHANNEL = 1;
