@@ -171,7 +171,7 @@ void wifiController() {
         logger(TRACE, "WiFi Update Connected");
         preferences.putString(PREFERENCES_KEY_WIFI_SSID, wifiSSID);
         preferences.putString(PREFERENCES_KEY_WIFI_PASSWORD, wifiPassword);
-        wifiState = WIFI_NETWORK_INITIALIZE;
+        ESP.restart();
       }
 
       if (millis() > wifiTime + WIFI_UPDATE_CONNECTION_TIMEOUT) {
