@@ -58,7 +58,7 @@ void wifiController() {
       if (wifiMode == WIFI_MODE_STA) {
         if (WiFi.status() != WL_CONNECTED) {
           logger(TRACE, "WiFi Retry Connect Station");
-          wifiState = WIFI_NETWORK_INITIALIZE;
+          wifiState = WIFI_NETWORK_CONNECT_STATION;
         }
       }
 
