@@ -166,6 +166,10 @@ function socketReceive(message) {
     case 'output':
       outputUpdate(data);
       break;
+
+    case 'touch':
+      touchUpdate(data);
+      break;
   }
 }
 
