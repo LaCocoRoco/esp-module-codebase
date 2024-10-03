@@ -94,13 +94,12 @@ void cmdHandler(String text) {
     }
 
     if (cmd2 == "network") {
-      logger(TRACE, "SSID:           " + WiFi.SSID());
-      logger(TRACE, "IPAddress:      " + WiFi.localIP().toString());
-      logger(TRACE, "Hostname:       " + MODULE_HOSTNAME + ".local");
-      logger(TRACE, "MAC WiFi:       " + WiFi.macAddress());
-      logger(TRACE, "MAC EspNow:     " + macToString(espNowMac));
-      logger(TRACE, "Channel WiFi:   " + String(WiFi.channel()));
-      logger(TRACE, "Channel EspNow: " + String(wifiChannel));
+      logger(TRACE, "WiFi SSID:      " + WiFi.SSID());
+      logger(TRACE, "WiFi Address:   " + wifiAddress.toString());
+      logger(TRACE, "WiFi Hostname:  " + MODULE_HOSTNAME + ".local");
+      logger(TRACE, "WiFi Channel:   " + String(WiFi.channel()));
+      logger(TRACE, "WiFi MAC:       " + WiFi.macAddress());
+      logger(TRACE, "EspNow MAC:     " + macToString(espNowMac));
     }
 
     if (cmd2 == "restart") {

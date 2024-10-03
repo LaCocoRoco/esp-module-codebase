@@ -15,22 +15,35 @@
 String wifiSSID;
 String wifiPassword;
 int wifiChannel;
-wifi_mode_t wifiMode;
 WifiState wifiState;
 IPAddress wifiAddress;
 bool wifiInitializeNetwork;
 bool wifiInitializeScanner;
 bool wifiInitializeUpdate;
 bool wifiInitializeStandalone;
+bool wifiConnectionFailed;
 bool wifiReset;
 unsigned long wifiTime;
 int scanner;
 
 void setupNetwork() {
-  if (mode == MODE_WEB) {
-    wifiInitializeNetwork = true;
-  } else {
-    wifiInitializeStandalone = true;
+  WiFi.mode(WIFI_AP_STA);
+
+  switch (mode) {
+    case MODE_LOW_POWER: {
+      wifiInitializeStandalone = true;
+      break;
+    }
+
+    case MODE_HYPRID: {
+      wifiInitializeStandalone = true;
+      break;
+    }
+
+    case MODE_WEB: {
+      wifiInitializeNetwork = true;
+      break;
+    }
   }
 }
 
@@ -41,11 +54,10 @@ void taskNetwork() {
 void wifiController() {
   switch (wifiState) {
     case WIFI_IDLE: {
-      if (wifiMode == WIFI_MODE_STA) {
-        if (WiFi.status() != WL_CONNECTED) {
-          logger(TRACE, "Wifi Retry Connect Station");
-          wifiState = WIFI_NETWORK_INITIALIZE;
-        }
+      if (wifiConnectionFailed) {
+        wifiConnectionFailed = false;
+        wifiTime = millis();
+        wifiState = WIFI_NETWORK_CONNECT_STATION;
       }
 
       if (wifiInitializeNetwork) {
@@ -77,24 +89,24 @@ void wifiController() {
     }
 
     case WIFI_NETWORK_INITIALIZE: {
-      wifiSSID = preferences.getString(PREFERENCES_KEY_WIFI_SSID, String());
-      wifiPassword = preferences.getString(PREFERENCES_KEY_WIFI_PASSWORD, String());
+      wifiSSID = preferences.getString(PREFERENCES_KEY_WIFI_SSID, "");
+      wifiPassword = preferences.getString(PREFERENCES_KEY_WIFI_PASSWORD, "");
+
+      if (!WIFI_SSID.isEmpty()) wifiSSID = WIFI_SSID;
+      if (!WIFI_PASSWORD.isEmpty()) wifiPassword = WIFI_PASSWORD;
+
       WiFi.disconnect();
       WiFi.setHostname(MODULE_HOSTNAME.c_str());
-      WiFi.mode(WIFI_AP_STA);
 
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
-        logger(TRACE, "Wifi Connect Station");
+        logger(TRACE, "WiFi Connect Station");
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
-        WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
         wifiTime = millis();
-        wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
-        logger(TRACE, "Wifi Setup Access Point");
+        logger(TRACE, "WiFi Setup Access Point");
         WiFi.softAP(MODULE_SSID.c_str(), NULL, WIFI_AP_CHANNEL, 0);
         WiFi.softAPConfig(WIFI_APIP, WIFI_GATEWAY, WIFI_SUBNET);
-        wifiMode = WIFI_AP;
         wifiState = WIFI_NETWORK_ACCESS_POINT;
       }
 
@@ -103,16 +115,17 @@ void wifiController() {
 
     case WIFI_NETWORK_CONNECT_STATION: {
       if (millis() > wifiTime + WIFI_NETWORK_CONNECT_STATION_TIMEOUT) {
-        logger(TRACE, "Wifi Connect Station Failed");
+        logger(TRACE, "WiFi Connect Station Failed");
+        wifiConnectionFailed = true;
         wifiState = WIFI_IDLE;
       }
 
       if (WiFi.isConnected()) {
-        logger(TRACE, "Wifi Station Connected");
-        logger(TRACE, "SSID:      " + WiFi.SSID());
-        logger(TRACE, "Hostname:  " + MODULE_HOSTNAME + ".local");
-        logger(TRACE, "IPAddress: " + WiFi.localIP().toString());
-        logger(TRACE, "Channel:   " + String(WiFi.channel()));
+        logger(TRACE, "WiFi Station Connected");
+        logger(TRACE, "WiFi SSID:      " + WiFi.SSID());
+        logger(TRACE, "WiFi Hostname:  " + MODULE_HOSTNAME + ".local");
+        logger(TRACE, "WiFi Address:   " + WiFi.localIP().toString());
+        logger(TRACE, "WiFi Channel:   " + String(WiFi.channel()));
         wifiAddress = WiFi.localIP();
         wifiChannel = WiFi.channel();
         wifiState = WIFI_NETWORK_MANAGE_CHANNEL;
@@ -122,11 +135,11 @@ void wifiController() {
     }
 
     case WIFI_NETWORK_ACCESS_POINT: {
-      logger(TRACE, "Wifi Access Point Initialized");
-      logger(TRACE, "SSID:      " + MODULE_SSID);
-      logger(TRACE, "Hostname:  " + MODULE_HOSTNAME + ".local");
-      logger(TRACE, "IPAddress: " + WIFI_APIP.toString());
-      logger(TRACE, "Channel:   " + String(WiFi.channel()));
+      logger(TRACE, "WiFi Access Point Initialized");
+      logger(TRACE, "WiFi SSID:      " + MODULE_SSID);
+      logger(TRACE, "WiFi Hostname:  " + MODULE_HOSTNAME + ".local");
+      logger(TRACE, "WiFi Address:   " + WIFI_APIP.toString());
+      logger(TRACE, "WiFi Channel:   " + String(WiFi.channel()));
       dnsServer.start(53, "*", WiFi.softAPIP());
       wifiAddress = WIFI_APIP;
       wifiChannel = WIFI_AP_CHANNEL;
@@ -144,7 +157,7 @@ void wifiController() {
     }
 
     case WIFI_UPDATE_INITIALIZE:
-      logger(TRACE, "Wifi Update Station Setup");
+      logger(TRACE, "WiFi Update Station Setup");
       WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
       wifiTime = millis();
       wifiState = WIFI_UPDATE_CONNECTION;
@@ -152,14 +165,14 @@ void wifiController() {
 
     case WIFI_UPDATE_CONNECTION: {
       if (WiFi.isConnected()) {
-        logger(TRACE, "Wifi Update Connected");
+        logger(TRACE, "WiFi Update Connected");
         preferences.putString(PREFERENCES_KEY_WIFI_SSID, wifiSSID);
         preferences.putString(PREFERENCES_KEY_WIFI_PASSWORD, wifiPassword);
-        wifiState = WIFI_NETWORK_INITIALIZE;
+        ESP.restart();
       }
 
       if (millis() > wifiTime + WIFI_UPDATE_CONNECTION_TIMEOUT) {
-        logger(TRACE, "Wifi Update Failed");
+        logger(TRACE, "WiFi Update Failed");
         wifiState = WIFI_NETWORK_INITIALIZE;
       }
 
@@ -167,7 +180,7 @@ void wifiController() {
     }
 
     case WIFI_SCANNER_INITIALIZE: {
-      logger(TRACE, "Wifi Scanner Initialized");
+      logger(TRACE, "WiFi Scanner Initialized");
       WiFi.scanDelete();
       WiFi.scanNetworks(true);
       wifiTime = millis();
@@ -177,7 +190,7 @@ void wifiController() {
 
     case WIFI_SCANNER_CONNECT: {
       if (WiFi.scanComplete() > 0) {
-        logger(TRACE, "Wifi Scanner Finished");
+        logger(TRACE, "WiFi Scanner Finished");
         for (int i = 0; i < WiFi.scanComplete(); i++) {
           const String ssid = WiFi.SSID(i);
           const String rssi = String(WiFi.RSSI(i));
@@ -189,7 +202,7 @@ void wifiController() {
       }
 
       if (millis() > wifiTime + WIFI_SCANNER_TIMEOUT) {
-        logger(TRACE, "Wifi Scanner Timeout");
+        logger(TRACE, "WiFi Scanner Timeout");
         wifiState = WIFI_IDLE;
       }
 
@@ -197,20 +210,22 @@ void wifiController() {
     }
 
     case WIFI_STANDALONE_INITIALIZE: {
-      logger(TRACE, "Wifi Standalone Initialized");
+      logger(TRACE, "WiFi Standalone Initialized");
       WiFi.disconnect();
       WiFi.mode(WIFI_AP_STA);
-      WiFi.softAP("HIDDEN", NULL, wifiChannel, 1);
-      wifiMode = WIFI_AP_STA;
+      WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
       wifiState = WIFI_IDLE;
       break;
     }
 
     case WIFI_RESET: {
+      logger(TRACE, "WiFi Cleared", false);
+      wifiSSID = "";
+      wifiPassword = "";
       preferences.putString(PREFERENCES_KEY_WIFI_SSID, wifiSSID);
       preferences.putString(PREFERENCES_KEY_WIFI_PASSWORD, wifiPassword);
-      logger(TRACE, "Wifi Cleared", false);
-      wifiState = WIFI_NETWORK_INITIALIZE;
+      wifiInitializeNetwork = true;
+      wifiState = WIFI_IDLE;
       break;
     }
   }

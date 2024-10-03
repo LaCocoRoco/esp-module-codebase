@@ -26,24 +26,27 @@ void requestHandlerIndexHtml(AsyncWebServerRequest *request) {
     if (var == "hwv") return MODULE_HWV;
     if (var == "swv") return MODULE_SWV;
 #ifdef ESP_CU
-    if (var == "touchModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "inputModule") return WEB_ELEMENT_DISPLAY_BLOCK;
-    if (var == "outputModule") return WEB_ELEMENT_DISPLAY_BLOCK;
+    if (var == "inputDataView") return WEB_ELEMENT_DISPLAY_BLOCK;
+    if (var == "outputDataView") return WEB_ELEMENT_DISPLAY_BLOCK;
+    if (var == "touchDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "sensorDataView") return WEB_ELEMENT_DISPLAY_BLOCK;
     if (var == "anemometerVelocity") return String(anemometerVelocity);
     if (var == "hydreonStatus") return String(hydreonStatus);
 #endif
 #ifdef ESP_SU
-    if (var == "touchModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "inputModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "outputModule") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "inputDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "outputDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "touchDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "sensorDataView") return WEB_ELEMENT_DISPLAY_BLOCK;
     if (var == "anemometerVelocity") return String(anemometerVelocity);
     if (var == "hydreonStatus") return String(hydreonStatus);
     if (var == "hydreonIntensity") return String(hydreonIntensity);
 #endif
 #ifdef ESP_OU
-    if (var == "touchModule") return WEB_ELEMENT_DISPLAY_BLOCK;
-    if (var == "inputModule") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "outputModule") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "inputDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "outputDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "touchDataView") return WEB_ELEMENT_DISPLAY_BLOCK;
+    if (var == "sensorDataView") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "chipId") return String(at42qt2120.chipID.value);
     if (var == "firmwareMajor") return String(at42qt2120.firmwareVersion.majorVersion);
     if (var == "firmwareMinor") return String(at42qt2120.firmwareVersion.minorVersion);

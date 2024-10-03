@@ -32,14 +32,8 @@ void taskTouch() {
 void touchController() {
   switch (touchState) {
     case TOUCH_IDLE: {
-      // touch event
       if (touchChangeEvent || touchChangeWakeupEvent) {
         touchChangeWakeupEvent = false;
-        touchState = TOUCH_CHANGE;
-      }
-
-      // reading touch register clears change flag
-      if (keyStatus.value != at42qt2120.keyStatus.value) {
         touchState = TOUCH_CHANGE;
       }
 
