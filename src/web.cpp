@@ -45,7 +45,7 @@ void requestHandlerIndexHtml(AsyncWebServerRequest *request) {
 #ifdef ESP_OU
     if (var == "inputDataView") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "outputDataView") return WEB_ELEMENT_DISPLAY_NONE;
-    if (var == "touchDataView") return WEB_ELEMENT_DISPLAY_NONE;
+    if (var == "touchDataView") return WEB_ELEMENT_DISPLAY_BLOCK;
     if (var == "sensorDataView") return WEB_ELEMENT_DISPLAY_NONE;
     if (var == "chipId") return String(at42qt2120.chipID.value);
     if (var == "firmwareMajor") return String(at42qt2120.firmwareVersion.majorVersion);

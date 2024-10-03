@@ -15,20 +15,19 @@
 String wifiSSID;
 String wifiPassword;
 int wifiChannel;
-wifi_mode_t wifiMode;
 WifiState wifiState;
 IPAddress wifiAddress;
 bool wifiInitializeNetwork;
 bool wifiInitializeScanner;
 bool wifiInitializeUpdate;
 bool wifiInitializeStandalone;
+bool wifiConnectionFailed;
 bool wifiReset;
 unsigned long wifiTime;
 int scanner;
 
 void setupNetwork() {
   WiFi.mode(WIFI_AP_STA);
-  wifiMode = WIFI_AP_STA;
 
   switch (mode) {
     case MODE_LOW_POWER: {
@@ -55,11 +54,10 @@ void taskNetwork() {
 void wifiController() {
   switch (wifiState) {
     case WIFI_IDLE: {
-      if (wifiMode == WIFI_MODE_STA) {
-        if (WiFi.status() != WL_CONNECTED) {
-          logger(TRACE, "WiFi Retry Connect Station");
-          wifiState = WIFI_NETWORK_CONNECT_STATION;
-        }
+      if (wifiConnectionFailed) {
+        wifiConnectionFailed = false;
+        wifiTime = millis();
+        wifiState = WIFI_NETWORK_CONNECT_STATION;
       }
 
       if (wifiInitializeNetwork) {
@@ -91,8 +89,8 @@ void wifiController() {
     }
 
     case WIFI_NETWORK_INITIALIZE: {
-      wifiSSID = preferences.getString(PREFERENCES_KEY_WIFI_SSID, String());
-      wifiPassword = preferences.getString(PREFERENCES_KEY_WIFI_PASSWORD, String());
+      wifiSSID = preferences.getString(PREFERENCES_KEY_WIFI_SSID, "");
+      wifiPassword = preferences.getString(PREFERENCES_KEY_WIFI_PASSWORD, "");
 
       if (!WIFI_SSID.isEmpty()) wifiSSID = WIFI_SSID;
       if (!WIFI_PASSWORD.isEmpty()) wifiPassword = WIFI_PASSWORD;
@@ -104,13 +102,11 @@ void wifiController() {
         logger(TRACE, "WiFi Connect Station");
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
         wifiTime = millis();
-        wifiMode = WIFI_STA;
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
         logger(TRACE, "WiFi Setup Access Point");
         WiFi.softAP(MODULE_SSID.c_str(), NULL, WIFI_AP_CHANNEL, 0);
         WiFi.softAPConfig(WIFI_APIP, WIFI_GATEWAY, WIFI_SUBNET);
-        wifiMode = WIFI_AP;
         wifiState = WIFI_NETWORK_ACCESS_POINT;
       }
 
@@ -120,6 +116,7 @@ void wifiController() {
     case WIFI_NETWORK_CONNECT_STATION: {
       if (millis() > wifiTime + WIFI_NETWORK_CONNECT_STATION_TIMEOUT) {
         logger(TRACE, "WiFi Connect Station Failed");
+        wifiConnectionFailed = true;
         wifiState = WIFI_IDLE;
       }
 
@@ -217,16 +214,18 @@ void wifiController() {
       WiFi.disconnect();
       WiFi.mode(WIFI_AP_STA);
       WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
-      wifiMode = WIFI_AP;
       wifiState = WIFI_IDLE;
       break;
     }
 
     case WIFI_RESET: {
+      logger(TRACE, "WiFi Cleared", false);
+      wifiSSID = "";
+      wifiPassword = "";
       preferences.putString(PREFERENCES_KEY_WIFI_SSID, wifiSSID);
       preferences.putString(PREFERENCES_KEY_WIFI_PASSWORD, wifiPassword);
-      logger(TRACE, "WiFi Cleared", false);
-      wifiState = WIFI_NETWORK_INITIALIZE;
+      wifiInitializeNetwork = true;
+      wifiState = WIFI_IDLE;
       break;
     }
   }
