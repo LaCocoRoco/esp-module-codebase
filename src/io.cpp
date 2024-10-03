@@ -140,14 +140,14 @@ void inputController() {
     if (ioBuffer.inputs.input10) {
       // light left pressed
       if (io.inputs.input10) {
-        // light left on
-        io.outputs.output06 = true;
+        // light right on
+        io.outputs.output11 = true;
       }
 
       // light left released
       if (!io.inputs.input10) {
-        // light left off
-        io.outputs.output06 = false;
+        // light right off
+        io.outputs.output11 = false;
       }
     }
 
@@ -155,14 +155,14 @@ void inputController() {
     if (ioBuffer.inputs.input11) {
       // light right pressed
       if (io.inputs.input11) {
-        // light right on
-        io.outputs.output11 = true;
+        // light left on
+        io.outputs.output06 = true;
       }
 
       // light right released
       if (!io.inputs.input11) {
-        // light right off
-        io.outputs.output11 = false;
+        // light left off
+        io.outputs.output06 = false;
       }
     }
 
