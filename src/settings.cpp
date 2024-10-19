@@ -10,6 +10,9 @@
 #include <anemometer.h>
 #include <hydreon.h>
 #endif
+#ifdef ESP_OU
+#include <touch.h>
+#endif
 
 Preferences preferences;
 
@@ -31,6 +34,9 @@ void setupSettings() {
   anemometerCalibratedVelocity = preferences.getInt(PREFERENCES_KEY_ANEMOMETER_CALIBRATED_VELOCITY);
   anemometerCalibratedAnalog = preferences.getInt(PREFERENCES_KEY_ANEMOMETER_CALIBRATED_ANALOG);
 #endif
+#ifdef ESP_OU
+  touchDefaultsLoaded = preferences.getBool(PREFERENCES_KEY_TOUCH_DEFAULTS_LOADED);
+#endif
 }
 
 void setDefaultPreferences() {
@@ -45,5 +51,8 @@ void setDefaultPreferences() {
   preferences.putInt(PREFERENCES_KEY_HYDREON_BAUDRATE, PREFERENCES_DEFAULT_HYREON_BAUDRATE);
   preferences.putInt(PREFERENCES_KEY_ANEMOMETER_CALIBRATED_VELOCITY, PREFERENCES_DEFAULT_ANEMOMETER_VELOCITY);
   preferences.putInt(PREFERENCES_KEY_ANEMOMETER_CALIBRATED_ANALOG, PREFERENCES_DEFAULT_ANEMOMETER_ANALOG);
+#endif
+#ifdef ESP_OU
+  preferences.putBool(PREFERENCES_KEY_TOUCH_DEFAULTS_LOADED, false);
 #endif
 }

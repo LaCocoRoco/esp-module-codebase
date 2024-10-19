@@ -19,7 +19,7 @@ static const int PREFERENCES_DEFAULT_ANEMOMETER_ANALOG = 500;
 #endif
 
 static const char* PREFERENCES_NAME = "preferences";
-static const char* PREFERENCES_KEY_DEFAULTS_LOADED = "defaultsLoaded";
+static const char* PREFERENCES_KEY_DEFAULTS_LOADED = "defaults";
 static const char* PREFERENCES_KEY_MODE = "mode";
 static const char* PREFERENCES_KEY_LOG_LEVEL = "logLevel";
 static const char* PREFERENCES_KEY_WIFI_SSID = "wifiSSID";
@@ -32,7 +32,7 @@ static const char* PREFERENCES_KEY_ANEMOMETER_CALIBRATED_VELOCITY = "velocity";
 static const char* PREFERENCES_KEY_ANEMOMETER_CALIBRATED_ANALOG = "analog";
 #endif
 #ifdef ESP_OU
-static const char* PREFERENCES_KEY_TOUCH_DEFAULTS_LOADED = "touchDefaultsLoaded";
+static const char* PREFERENCES_KEY_TOUCH_DEFAULTS_LOADED = "touchDefaults";
 #endif
 
 extern Preferences preferences;
