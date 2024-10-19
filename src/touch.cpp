@@ -42,7 +42,6 @@ void touchController() {
     };
 
     case TOUCH_CHANGE: {
-      logger(TRACE, "touch change");
       KeyStatus keyStatus;
       twiRead(AT42QT2120_ADDRESS, DETECTION_STATUS);
       keyStatus.first = twiRead(AT42QT2120_ADDRESS, KEY_STATUS_FIRST);
@@ -170,7 +169,7 @@ void touchWriteCommonRegister(String name, const byte value) {
     twiWrite(AT42QT2120_ADDRESS, DRIFT_HOLD_TIME, sliderOptions.value);
   }
 
-  // twiWrite(AT42QT2120_ADDRESS, CALIBRATE, true);
+  twiWrite(AT42QT2120_ADDRESS, CALIBRATE, true);
 }
 
 void touchWriteKeyRegister(String name, const byte value, const byte key) {
