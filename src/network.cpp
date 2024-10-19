@@ -101,6 +101,7 @@ void wifiController() {
       if (!wifiSSID.isEmpty() && !wifiPassword.isEmpty()) {
         logger(TRACE, "WiFi Connect Station");
         WiFi.begin(wifiSSID.c_str(), wifiPassword.c_str());
+        WiFi.softAP("HIDDEN", NULL, WIFI_AP_CHANNEL, 1);
         wifiTime = millis();
         wifiState = WIFI_NETWORK_CONNECT_STATION;
       } else {
