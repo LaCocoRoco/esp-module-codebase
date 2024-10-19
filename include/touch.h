@@ -252,6 +252,7 @@ extern AT42QT2120 at42qt2120;
 extern TouchState touchState;
 extern bool touchChangeEvent;
 extern bool touchChangeWakeupEvent;
+extern bool touchDefaultsLoaded;
 
 void setupTouch();
 void taskTouch();

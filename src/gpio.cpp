@@ -53,7 +53,7 @@ void taskGpio() {
 void gpioController() {
   modeButtonEvent = !digitalRead(GPIO_MOD);
 #ifdef ESP_OU
-  touchChangeEvent = digitalRead(GPIO_CHG);
+  touchChangeEvent = !digitalRead(GPIO_CHG);
 #endif
 #ifdef ESP_SU
   hydreonStatus = !digitalRead(GPIO_OUT);

@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-static const String WIFI_SSID = "";
-static const String WIFI_PASSWORD = "";
+static const String WIFI_SSID = "SCANNER1";
+static const String WIFI_PASSWORD = "Da2905!989dA";
 static const int WIFI_NETWORK_CONNECT_STATION_TIMEOUT = 10000;
 static const int WIFI_SCANNER_TIMEOUT = 15000;
 static const int WIFI_UPDATE_CONNECTION_TIMEOUT = 5000;
